@@ -12,3 +12,13 @@
 2. Shell script
 
 ## Coding Conventions
+
+### 변수명
+
+1. ~~
+2. ~~
+
+### 함수명
+
+1. ~~
+2. ~~
