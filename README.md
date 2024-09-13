@@ -15,8 +15,9 @@
 
 ### 변수명
 
-1. ~~
+1. cnt
+
 
 ### 함수명
 
-1. ~~
+1. DFS/BFS Master piece in a piece
