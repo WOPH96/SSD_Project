@@ -10,3 +10,5 @@
 
 1. C
 2. Shell script
+
+## Coding Conventions
