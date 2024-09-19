@@ -62,7 +62,6 @@
     "array": "cpp",
     "atomic": "cpp",
     "bit": "cpp",
-    "*.tcc": "cpp",
     "cctype": "cpp",
     "clocale": "cpp",
     "cmath": "cpp",
@@ -102,6 +101,12 @@
     "ostream": "cpp",
     "stdexcept": "cpp",
     "streambuf": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "cstring": "cpp",
+    "optional": "cpp",
+    "fstream": "cpp",
+    "sstream": "cpp",
+    "ctime": "cpp",
+    "iomanip": "cpp"
   }
 }
