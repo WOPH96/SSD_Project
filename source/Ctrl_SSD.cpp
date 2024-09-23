@@ -41,7 +41,7 @@ public:
         // init();
     }
 
-    void init()
+    void Init()
     {
         OpenSSDFile(std::ios::out);
         OpentxtFile(std::ios::out);
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
         }
         else if (!strcmp(argv[1], "I") && argc == 2)
         {
-            ssd.init();
+            ssd.Init();
             // std::cout << "SSD 초기화" << std::endl;
         }
     }
