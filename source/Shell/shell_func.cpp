@@ -46,23 +46,23 @@ void PrintHelp()
 }
 
 // TestApp1: Full Write 후 Read Compare
-int testapp1() {
+int TestApp1() {
     std::string test_value = "0xabcd1234";  // 테스트할 값
     std::ifstream result_file;              // 파일 스트림 객체
 
     // Step 0: SSD 초기화
-    std::cout << "[testapp1] SSD 초기화 중...\n";
+    std::cout << "[TestApp1] SSD 초기화 중...\n";
     ExecuteCommand("./SSD I");
 
     // Step 1: Full Write
-    std::cout << "[testapp1] SSD에 전체 값을 쓰는 중...\n";
+    std::cout << "[TestApp1] SSD에 전체 값을 쓰는 중...\n";
     for (int lba = 0; lba < 100; ++lba) {
         std::string write_command = "./SSD W " + std::to_string(lba) + " " + test_value;
         ExecuteCommand(write_command);
     }
 
     // Step 2: Full Read and Compare
-    std::cout << "[testapp1] SSD에서 전체 값을 읽어오는 중...\n";
+    std::cout << "[TestApp1] SSD에서 전체 값을 읽어오는 중...\n";
     for (int lba = 0; lba < 100; ++lba) {
         std::string read_command = "./SSD R " + std::to_string(lba);
         ExecuteCommand(read_command);  // 읽은 값을 result.txt에 저장
@@ -83,22 +83,22 @@ int testapp1() {
         }
     }
 
-    std::cout << "[testapp1] 테스트 완료\n";
+    std::cout << "[TestApp1] 테스트 완료\n";
     return 0;
 }
 
 // TestApp2: Write Aging 후 Read Compare
-int testapp2() {
+int TestApp2() {
     std::string initial_value = "0xAAAABBBB";  // 초기 쓰기 값
     std::string final_value = "0x12345678";    // 마지막에 덮어씌울 값
     std::ifstream result_file;                 // 파일 스트림 객체
 
     // Step 0: SSD 초기화
-    std::cout << "[testapp2] SSD 초기화 중...\n";
+    std::cout << "[TestApp2] SSD 초기화 중...\n";
     ExecuteCommand("./SSD I");
 
     // Step 1: 0 ~ 5번 LBA에 initial_value를 30번 쓰기
-    std::cout << "[testapp2] SSD에 값을 30번 쓰는 중...\n";
+    std::cout << "[TestApp2] SSD에 값을 30번 쓰는 중...\n";
     for (int i = 0; i < 30; ++i) {
         for (int lba = 0; lba < 6; ++lba) {
             std::string write_command = "./SSD W " + std::to_string(lba) + " " + initial_value;
@@ -107,14 +107,14 @@ int testapp2() {
     }
 
     // Step 2: 0 ~ 5번 LBA에 final_value로 덮어쓰기
-    std::cout << "[testapp2] 덮어씌우는 값 쓰는 중...\n";
+    std::cout << "[TestApp2] 덮어씌우는 값 쓰는 중...\n";
     for (int lba = 0; lba < 6; ++lba) {
         std::string write_command = "./SSD W " + std::to_string(lba) + " " + final_value;
         ExecuteCommand(write_command);
     }
 
     // Step 3: 0 ~ 5번 LBA 값 읽어서 검증
-    std::cout << "[testapp2] SSD에서 값을 읽어오는 중...\n";
+    std::cout << "[TestApp2] SSD에서 값을 읽어오는 중...\n";
     for (int lba = 0; lba < 6; ++lba) {
         std::string read_command = "./SSD R " + std::to_string(lba);
         ExecuteCommand(read_command);  // 읽은 값을 result.txt에 저장
@@ -135,6 +135,6 @@ int testapp2() {
         }
     }
 
-    std::cout << "[testapp2] 테스트 완료\n";
+    std::cout << "[TestApp2] 테스트 완료\n";
     return 0;
 }
