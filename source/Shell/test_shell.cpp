@@ -43,14 +43,14 @@ int main()
         else if (input.find("write") == 0)
         {
             std::string ssd_command = "./SSD W " + input.substr(6);
-            ExecuteCommand(ssd_command);
+            std::cout << ExecuteCommand(ssd_command) << std::endl;
             std::cout << "write완료" << std::endl;
         }
         // read 명령 처리
         else if (input.find("read") == 0)
         {
             std::string ssd_command = "./SSD R " + input.substr(5);
-            ExecuteCommand(ssd_command);
+            std::cout << ExecuteCommand(ssd_command) << std::endl;
 
             std::ifstream result_file("../result/result.txt");
             if (result_file.is_open())
