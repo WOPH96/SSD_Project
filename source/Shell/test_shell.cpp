@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <cstring>
 int main()
 {
     std::string input;
@@ -43,27 +44,40 @@ int main()
         else if (input.find("write") == 0)
         {
             std::string ssd_command = "./SSD W " + input.substr(6);
-            std::cout << ExecuteCommand(ssd_command) << std::endl;
-            std::cout << "write완료" << std::endl;
+            std::string errstr = ExecuteCommand(ssd_command);
+            // std::cout << errstr;
+            if (std::strcmp(errstr.c_str(), "잘못된 입력\n") == 0)
+            {
+                std::cout << errstr;
+            }
+            else
+                std::cout << "write완료" << std::endl;
         }
         // read 명령 처리
         else if (input.find("read") == 0)
         {
             std::string ssd_command = "./SSD R " + input.substr(5);
-            std::cout << ExecuteCommand(ssd_command) << std::endl;
-
-            std::ifstream result_file("../result/result.txt");
-            if (result_file.is_open())
+            std::string errstr = ExecuteCommand(ssd_command);
+            // std::cout << errstr;
+            if (std::strcmp(errstr.c_str(), "잘못된 입력\n") == 0)
             {
-                std::string line;
-                std::getline(result_file, line);                                     // result.txt에서 첫 번째 줄 읽기
-                std::cout << "LBA " << input.substr(5) << ": " << line << std::endl; // LBA와 함께 출력
-                result_file.close();
-                std::cout << "read완료" << std::endl;
+                std::cout << errstr;
             }
             else
             {
-                std::cerr << "result.txt 파일을 열 수 없습니다." << std::endl;
+                std::ifstream result_file("../result/result.txt");
+                if (result_file.is_open())
+                {
+                    std::string line;
+                    std::getline(result_file, line);                                     // result.txt에서 첫 번째 줄 읽기
+                    std::cout << "LBA " << input.substr(5) << ": " << line << std::endl; // LBA와 함께 출력
+                    result_file.close();
+                    std::cout << "read완료" << std::endl;
+                }
+                else
+                {
+                    std::cerr << "result.txt 파일을 열 수 없습니다." << std::endl;
+                }
             }
         }
         // fullwrite 명령 처리
