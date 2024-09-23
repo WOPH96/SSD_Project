@@ -12,6 +12,7 @@ class SSD
 private:
     static const uint32_t SSD_SIZE = 400;
     static const uint32_t LBA_SIZE = 4;
+    static const uint32_t LBA_COUNT = 100;
     static const std::string SSD_FILE_NAME;
     static const std::string RESULT_FILE_NAME;
 
@@ -36,48 +37,68 @@ private:
     }
 
 public:
-    SSD()
-    {
-        // init();
-    }
+    SSD() {}
 
     void Init()
     {
         OpenSSDFile(std::ios::out);
-        OpentxtFile(std::ios::out);
-        std::vector<char> buffer(SSD_SIZE, 0);
-        ssd_file.write(buffer.data(), SSD_SIZE);
+        for (uint32_t i = 0; i < LBA_COUNT; ++i)
+        {
+            ssd_file << "0X00000000" << std::endl;
+        }
         ssd_file.close();
-        result_file.write("", 1);
+
+        OpentxtFile(std::ios::out);
+        result_file.write("", 0);
         result_file.close();
         std::cout << "SSD, nand.txt 초기화 완료\n";
     }
 
     void Read(uint32_t *buffer, uint32_t offset, uint32_t count = 1)
     {
-        if (LBA_SIZE * (offset + count) > SSD_SIZE)
+        if (offset >= LBA_COUNT)
         {
             throw std::out_of_range("읽기 범위가 SSD 크기를 초과합니다.");
         }
         OpenSSDFile(std::ios::in);
-        ssd_file.seekg(offset * LBA_SIZE);
-        ssd_file.read(reinterpret_cast<char *>(buffer), count * LBA_SIZE);
+        std::string line;
+        ssd_file.seekg(0);
+        for (uint32_t i = 0; i <= offset; ++i)
+        {
+            std::getline(ssd_file, line);
+        }
+        *buffer = std::stoul(line.substr(2), nullptr, 16);
         ssd_file.close();
+
         OpentxtFile(std::ios::out);
-        result_file << "0x" << std::hex << std::setw(8)
-                    << std::setfill('0') << *buffer << std::endl;
+        result_file << line << std::endl;
         result_file.close();
     }
 
     void Write(const uint32_t *buffer, uint32_t offset, uint32_t count = 1)
     {
-        if (LBA_SIZE * (offset + count) > SSD_SIZE)
+        if (offset >= LBA_COUNT)
         {
             throw std::out_of_range("쓰기 범위가 SSD 크기를 초과합니다.");
         }
-        OpenSSDFile(std::ios::in | std::ios::out);
-        ssd_file.seekp(offset * LBA_SIZE);
-        ssd_file.write(reinterpret_cast<const char *>(buffer), count * LBA_SIZE);
+        std::vector<std::string> lines;
+        OpenSSDFile(std::ios::in);
+        std::string line;
+        while (std::getline(ssd_file, line))
+        {
+            lines.push_back(line);
+        }
+        ssd_file.close();
+
+        std::stringstream ss;
+        ss << "0X" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << *buffer;
+        lines[offset] = ss.str();
+
+        OpenSSDFile(std::ios::out);
+        for (const auto &l : lines)
+        {
+            ssd_file << l << std::endl;
+        }
         ssd_file.close();
     }
 };
@@ -98,6 +119,7 @@ uint32_t StrtoHex(const char *hexstr)
     ss >> result;
     return result;
 }
+
 int main(int argc, char *argv[])
 {
     try
@@ -112,22 +134,17 @@ int main(int argc, char *argv[])
 
         if (!strcmp(argv[1], "W") && argc == 4)
         {
-            // std::cout << "쓰기 작업 실행" << argv[2] << std::endl;
             uint32_t data = StrtoHex(argv[3]);
             ssd.Write(&data, atoi(argv[2]));
-            // std::cout << "쓰기 완료: " << data << std::endl;
         }
         else if (!strcmp(argv[1], "R") && argc == 3)
         {
-            // std::cout << "읽기 작업 실행, 주소: " << argv[2] << std::endl;
             uint32_t read_buffer = 0;
             ssd.Read(&read_buffer, atoi(argv[2]));
-            // std::cout << "읽기 완료" << std::hex << read_buffer << std::endl;
         }
         else if (!strcmp(argv[1], "I") && argc == 2)
         {
             ssd.Init();
-            // std::cout << "SSD 초기화" << std::endl;
         }
     }
     catch (const std::exception &e)
