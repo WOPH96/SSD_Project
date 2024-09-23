@@ -112,14 +112,14 @@ int main(int argc, char *argv[])
 
         if (!strcmp(argv[1], "W") && argc == 4)
         {
-            // std::cout << "쓰기 작업 실행" << std::endl;
+            std::cout << "쓰기 작업 실행, 주소: " << argv[2] << std::endl;
             uint32_t data = StrtoHex(argv[3]);
             ssd.Write(&data, atoi(argv[2]));
             // std::cout << "쓰기 완료: " << data << std::endl;
         }
         else if (!strcmp(argv[1], "R") && argc == 3)
         {
-            std::cout << "읽기 작업 실행" << std::endl;
+            std::cout << "읽기 작업 실행, 주소: " << argv[2] << std::endl;
             uint32_t read_buffer = 0;
             ssd.Read(&read_buffer, atoi(argv[2]));
             std::cout << "읽기 완료: 0x" << std::hex << read_buffer << std::endl;
