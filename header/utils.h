@@ -3,6 +3,6 @@
 
 #include <cstdint>
 
-uint32_t strtohex(const char* hexstr);
+uint32_t StrtoHex(const char *hexstr);
 
 #endif
