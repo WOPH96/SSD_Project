@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 
+
 // 명령어 실행 함수 (결과값 반환)
 std::string ExecuteCommand(const std::string &command)
 {
@@ -47,7 +48,7 @@ void PrintHelp()
 
 // TestApp1: Full Write 후 Read Compare
 int TestApp1() {
-    std::string test_value = "0xabcd1234";  // 테스트할 값
+    std::string test_value = "0XABCD1234";  // 테스트할 값
     std::ifstream result_file;              // 파일 스트림 객체
 
     // Step 0: SSD 초기화
@@ -75,7 +76,7 @@ int TestApp1() {
             if (line == test_value) {
                 std::cout << "LBA " << lba << ": 값 일치 (" << line << ")\n";
             } else {
-                std::cerr << "LBA " << lba << ": 값 불일치! (" << line << " != " << test_value << ")\n";
+                std::cerr << "LBA " << lba << ": 값 불일치! (" << line << "!=" << test_value << ")\n";
             }
             result_file.close();
         } else {
@@ -90,7 +91,7 @@ int TestApp1() {
 // TestApp2: Write Aging 후 Read Compare
 int TestApp2() {
     std::string initial_value = "0xAAAABBBB";  // 초기 쓰기 값
-    std::string final_value = "0x12345678";    // 마지막에 덮어씌울 값
+    std::string final_value = "0X12345678";    // 마지막에 덮어씌울 값
     std::ifstream result_file;                 // 파일 스트림 객체
 
     // Step 0: SSD 초기화
